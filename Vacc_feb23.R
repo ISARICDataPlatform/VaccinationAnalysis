@@ -10,7 +10,19 @@
   
   #Setting wd and loading data
   setwd("F:\\VaccinationAnalysis")
-  
+
+#Load IN domain
+int <- fread(file=" Partner_IN_20230110", skip = 0) 
+int<-as_tibble(int)
+colnames(int) <- tolower (colnames(int))
+
+#Find terms with covid vaccination in the IN domain variable "INTRT"
+vaccination_feb<- int %>%
+  filter(intrt%like%"COVID" & intrt%like%"VACC")%>%
+  group_by(usubjid)%>%
+  as.data.frame()
+  save(vaccination_feb,file="vaccination_feb2023_v2.rda")
+
   load(file='Data/vaccination_feb2023_v2.rda') #Vaccination data
   
   vacc <- subset(vaccination_feb, select=c("usubjid","studyid","inrefid","intrt","inmodify",
